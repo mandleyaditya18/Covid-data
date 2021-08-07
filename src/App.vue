@@ -1,17 +1,17 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Hello World</h1>
+    
+    <StateTable></StateTable>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import StateTable from './components/States/StateTable.vue';
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    StateTable
   }
 }
 </script>

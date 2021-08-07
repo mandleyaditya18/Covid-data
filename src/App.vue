@@ -1,8 +1,6 @@
 <template>
   <div>
-    {{pagination.page}}
-    <h1>Hello World</h1>
-    <Table v-if="tableData" :covidData="tableData" :config="tableConfig" />
+    <Table v-if="tableData" :covidData="computedTableData" :config="tableConfig" />
     <Pagination :totalRecords="tableCount" v-model="pagination" />
   </div>
 </template>
@@ -46,15 +44,14 @@ export default {
     tableCount() {
       return Object.keys(this.tableData).length;
     },
-    // computedTableData() {
-    //   if (!this.tableData) return [];
-    //   else {
-    //     const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
-    //     const lastIndex = this.pagination.page * this.pagination.perPage;
-    //     console.log(firstIndex, lastIndex);
-    //     return this.tableData.slice(firstIndex, lastIndex);
-    //   }
-    // }
+    computedTableData() {
+      if (!this.tableData) return [];
+      else {
+        const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
+        const lastIndex = this.pagination.page * this.pagination.perPage;
+        return this.tableData.slice(firstIndex, lastIndex);
+      }
+    }
   },
 };
 </script>

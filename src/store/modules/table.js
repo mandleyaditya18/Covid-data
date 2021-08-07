@@ -4,7 +4,7 @@ const state = {
 
 const mutations = {
   SET_COVID_DATA(state, theData) {
-    state.covidData.push(theData);
+    state.covidData = theData;
   },
 };
 

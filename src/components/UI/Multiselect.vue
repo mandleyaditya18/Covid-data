@@ -15,10 +15,10 @@
       </select>
     </div>
     <div class="col-lg-6 mt-4">
-      <button class="btn btn-primary" @click="someStates">
+      <button class="btn btn-primary mx-2" @click="someStates">
         Show State Data
       </button>
-      <button class="btn btn-info" @click="resetData">Reset</button>
+      <button class="btn btn-info mx-2" @click="resetData">Reset</button>
     </div>
   </div>
 </template>

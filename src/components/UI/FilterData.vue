@@ -3,7 +3,7 @@
     <div class="col-lg-3">
       <label class="d-block " for="fields">Choose Field</label>
       <select
-        class="d-block form-control"
+        class="d-block form-select"
         name="fields"
         id="fields"
         v-model="selectedField"
@@ -16,7 +16,7 @@
     <div class="col-lg-3">
       <label class="d-block" for="operation">Choose Operation</label>
       <select
-        class="d-block form-control"
+        class="d-block form-select"
         name="operation"
         id="operation"
         v-model="operation"
@@ -31,8 +31,8 @@
       <input class="d-block form-control" type="number" v-model="value" />
     </div>
     <div class="col-lg-3 mt-4">
-      <button class="btn btn-primary" @click="loadData">Show Data</button>
-      <button class="btn btn-info" @click="resetData">Reset Data</button>
+      <button class="btn btn-primary mx-2" @click="loadData">Show Data</button>
+      <button class="btn btn-info mx-2" @click="resetData">Reset Data</button>
     </div>
   </div>
 </template>
@@ -60,19 +60,20 @@ export default {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] < this.value;
         });
+        this.$emit("filteredData", this.filteredData);
       }
       if (this.operation === "gt" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] > this.value;
         });
+        this.$emit("filteredData", this.filteredData);
       }
       if (this.operation === "eq" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] == this.value;
         });
+        this.$emit("filteredData", this.filteredData);
       }
-
-      this.$emit("filteredData", this.filteredData);
     },
     resetData() {
       this.selectedField = "";

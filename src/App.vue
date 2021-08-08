@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col align-self-center">
+      <div class="col d-flex justify-content-center">
         <Pagination :totalRecords="tableCount" v-model="pagination" />
       </div>
     </div>

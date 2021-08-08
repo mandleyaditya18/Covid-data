@@ -3,12 +3,11 @@
     <thead>
       <tr>
         <th>State</th>
-        <th v-for="(obj, ind) in config" :key="ind">{{ obj.title }}</th>
+        <th v-for="(obj, ind) in config" :key="ind" @click="sort(obj.key)">{{ obj.title }}</th>
       </tr>
     </thead>
     <tbody>
-      <!-- {{covidData[0]['AN']['total']}} -->
-      <tr v-for="(row, index) in covidData" :key="index">
+      <tr v-for="(row, index) in tempData" :key="index">
         <td>{{ row.state }}</td>
         <td v-for="(obj, ind) in config" :key="ind">
           {{ row["total"][obj.key] }}
@@ -21,6 +20,31 @@
 <script>
 export default {
   props: ["covidData", "config"],
+  data() {
+    return {
+      tempData: this.covidData,
+      currentSort: '',
+      isAsc: true
+    };
+  },
+  methods: {
+    sort(ind) {
+      if (ind === this.currentSort) {
+        this.isAsc = !this.isAsc;
+      }
+      this.currentSort = ind;
+
+      this.tempData = this.covidData.sort((a,b) => {
+        if (a['total'][ind] > b['total'][ind]) {
+          return this.isAsc ? 1 : -1;
+        }
+        else if (a['total'][ind] < b['total'][ind]) {
+          return this.isAsc ? -1 : 1;
+        }
+        return 0;
+      })
+    },
+  }
 };
 </script>
 

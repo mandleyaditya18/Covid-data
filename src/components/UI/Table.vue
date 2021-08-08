@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table v-if="tempData">
     <thead>
       <tr>
         <th>State</th>
@@ -7,7 +7,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, index) in tempData" :key="index">
+      <tr v-for="(row, index) in covidData" :key="index">
         <td>{{ row.state }}</td>
         <td v-for="(obj, ind) in config" :key="ind">
           {{ row["total"][obj.key] }}
@@ -22,10 +22,13 @@ export default {
   props: ["covidData", "config"],
   data() {
     return {
-      tempData: this.covidData,
+      tempData: [],
       currentSort: '',
       isAsc: true
     };
+  },
+  mounted() {
+    this.tempData = this.covidData;
   },
   methods: {
     sort(ind) {

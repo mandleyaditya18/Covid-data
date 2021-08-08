@@ -1,6 +1,16 @@
 <template>
   <div>
-    <Table v-if="tableData" :covidData="computedTableData" :config="tableConfig" />
+    <Multiselect @statesData="statesTableData($event)" @resetData="statesTableData($event)" />
+    <Table
+      v-if="tableData && selectedStates.length === 0"
+      :covidData="paginatedTableData"
+      :config="tableConfig"
+    />
+    <Table
+      v-if="selectedStates.length !== 0" 
+      :covidData="selectedStates"
+      :config="tableConfig"
+    />
     <Pagination :totalRecords="tableCount" v-model="pagination" />
   </div>
 </template>
@@ -10,19 +20,22 @@ import Table from "./components/UI/Table.vue";
 import axios from "axios";
 import { config } from "./utils/config";
 import Pagination from "./components/UI/Pagination.vue";
+import Multiselect from "./components/UI/Multiselect.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     Table,
     Pagination,
+    Multiselect,
   },
   data() {
     return {
       tableConfig: config,
       pagination: { page: 1, perPage: 10 },
       dataKeys: [],
-      states: [] 
+      states: [],
+      selectedStates: [],
     };
   },
   mounted() {
@@ -33,25 +46,31 @@ export default {
         for (let key of this.dataKeys) {
           this.states.push(data[key]);
         }
-        for (let i=0; i<this.states.length; i++) {
+        for (let i = 0; i < this.states.length; i++) {
           this.states[i].state = this.dataKeys[i];
         }
         this.$store.dispatch("initData", this.states);
       });
   },
   computed: {
-    ...mapGetters({tableData: "covidData"}),
+    ...mapGetters({ tableData: "covidData" }),
     tableCount() {
       return Object.keys(this.tableData).length;
     },
-    computedTableData() {
+    paginatedTableData() {
       if (!this.tableData) return [];
       else {
         const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
         const lastIndex = this.pagination.page * this.pagination.perPage;
         return this.tableData.slice(firstIndex, lastIndex);
       }
-    }
+    },
+  },
+  methods: {
+    statesTableData(fewStates) {
+      console.log(fewStates);
+      this.selectedStates = fewStates;
+    },
   },
 };
 </script>

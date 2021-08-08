@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <label for="states">Choose States</label>
-    <select
-      name="states"
-      id="states"
-      v-model="selectedStates"
-      multiple
-    >
-      <option v-for="state in states" :value="state" :key="state.state">
-        {{ state.state }}
-      </option>
-    </select>
-    <button @click="someStates">Show State Data</button>
-    <button @click="resetData">Reset</button>
+  <div class="row">
+    <div class="col-lg-6">
+      <label class="d-block" for="states">Choose States</label>
+      <select
+        class="d-block form-control"
+        name="states"
+        id="states"
+        v-model="selectedStates"
+        multiple
+      >
+        <option v-for="state in states" :value="state" :key="state.state">
+          {{ state.state }}
+        </option>
+      </select>
+    </div>
+    <div class="col-lg-6 mt-4">
+      <button class="btn btn-primary" @click="someStates">
+        Show State Data
+      </button>
+      <button class="btn btn-info" @click="resetData">Reset</button>
+    </div>
   </div>
 </template>
 
@@ -33,24 +40,11 @@ export default {
       this.$emit("statesData", this.selectedStates);
     },
     resetData() {
-        this.selectedStates = [];
-        this.$emit("resetData", this.selectedStates);
-    }
+      this.selectedStates = [];
+      this.$emit("resetData", this.selectedStates);
+    },
   },
 };
 </script>
 
-<style scoped>
-select {
-  width: 20%;
-  
-}
-
-select[multiple]{
-height: 30px;
-}
-
-select[multiple]:focus{
-height: 500px;
-}
-</style>
+<style scoped></style>

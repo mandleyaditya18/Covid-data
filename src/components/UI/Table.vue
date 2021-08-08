@@ -1,12 +1,18 @@
 <template>
-  <table v-if="tempData">
-    <thead>
+  <table
+    v-if="tempData"
+    class="table table-striped table-light table-bordered table-hover table-responsive"
+  >
+    <thead class="text-center">
       <tr>
         <th>State</th>
-        <th v-for="(obj, ind) in config" :key="ind" @click="sort(obj.key)">{{ obj.title }}</th>
+        <th v-for="(obj, ind) in config" :key="ind">
+          {{ obj.title }}
+          <span><i class="bi bi-filter" @click="sort(obj.key)"></i></span>
+        </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="text-center">
       <tr v-for="(row, index) in covidData" :key="index">
         <td>{{ row.state }}</td>
         <td v-for="(obj, ind) in config" :key="ind">
@@ -23,8 +29,8 @@ export default {
   data() {
     return {
       tempData: [],
-      currentSort: '',
-      isAsc: true
+      currentSort: "",
+      isAsc: true,
     };
   },
   mounted() {
@@ -37,29 +43,17 @@ export default {
       }
       this.currentSort = ind;
 
-      this.tempData = this.covidData.sort((a,b) => {
-        if (a['total'][ind] > b['total'][ind]) {
+      this.tempData = this.covidData.sort((a, b) => {
+        if (a["total"][ind] > b["total"][ind]) {
           return this.isAsc ? 1 : -1;
-        }
-        else if (a['total'][ind] < b['total'][ind]) {
+        } else if (a["total"][ind] < b["total"][ind]) {
           return this.isAsc ? -1 : 1;
         }
         return 0;
-      })
+      });
     },
-  }
+  },
 };
 </script>
 
-<style>
-table,
-td,
-th {
-  border: 1px solid black;
-}
-
-table {
-  width: 60%;
-  border-collapse: collapse;
-}
-</style>
+<style scoped></style>

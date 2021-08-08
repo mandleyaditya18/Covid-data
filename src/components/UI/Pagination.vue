@@ -1,12 +1,20 @@
 <template>
-  <section>
-    <!-- <h1>{{Object.keys(this.$store.getters.covidData).length}}</h1> -->
+<div>
+  <!-- <section>
     <p>
       <button @click="changePage(-1)">Back</button>
       <span>Showing Page {{ page }} of {{ pages }}</span>
       <button @click="changePage(1)">Next</button>
     </p>
-  </section>
+  </section> -->
+  <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item page-link pg" @click="changePage(-1)">Previous</li>
+    <li class="page-item page-link pg" @click="goToPage(i)" v-for="i in pages" :key="i">{{i}}</li>
+    <li class="page-item page-link pg" @click="changePage(1)">Next</li>
+  </ul>
+</nav>
+</div> 
 </template>
 
 <script>
@@ -39,9 +47,17 @@ export default {
           }
 
           this.$emit('input', {page: this.page, perPage: this.perPage});
+      },
+      goToPage(val) {
+        this.page = val;
+        this.$emit('input', {page: this.page, perPage: this.perPage});
       }
   }
 };
 </script>
 
-<style></style>
+<style scoped>
+  li {
+    cursor: pointer !important;
+  }
+</style>

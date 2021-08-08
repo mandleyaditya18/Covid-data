@@ -1,29 +1,46 @@
 <template>
-  <div>
-    <Multiselect
-      @statesData="statesTableData($event)"
-      @resetData="statesTableData($event)"
-    />
-    <Table
-      v-if="tableType === 'default'"
-      :covidData="paginatedTableData"
-      :config="tableConfig"
-    />
-    <Table
-      v-if="tableType === 'selected'"
-      :covidData="selectedStates"
-      :config="tableConfig"
-    />
-    <Table
-      v-if="tableType === 'filtered'"
-      :covidData="filteredStatesData"
-      :config="tableConfig"
-    />
-    <Pagination :totalRecords="tableCount" v-model="pagination" />
-    <FilterData
-      @filteredData="filterStatesData($event)"
-      @resetData="filterStatesData($event)"
-    />
+  <div class="container-fluid">
+    <Navbar />
+    <div class="row">
+      <div class="col-lg-4 col-md-6">
+        <Multiselect
+          @statesData="statesTableData($event)"
+          @resetData="statesTableData($event)"
+        />
+      </div>
+      <div class="col-lg-8 col-md-6">
+        <FilterData
+          @filteredData="filterStatesData($event)"
+          @resetData="filterStatesData($event)"
+        />
+      </div>
+    </div>
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-10 col-md-6">
+        <br /><br />
+        <Table
+          v-if="tableType === 'default'"
+          :covidData="paginatedTableData"
+          :config="tableConfig"
+        />
+        <Table
+          v-if="tableType === 'selected'"
+          :covidData="selectedStates"
+          :config="tableConfig"
+        />
+        <Table
+          v-if="tableType === 'filtered'"
+          :covidData="filteredStatesData"
+          :config="tableConfig"
+        />
+        <br /><br />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-self-center">
+        <Pagination :totalRecords="tableCount" v-model="pagination" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +51,7 @@ import { config } from "./utils/config";
 import Pagination from "./components/UI/Pagination.vue";
 import Multiselect from "./components/UI/Multiselect.vue";
 import FilterData from "./components/UI/FilterData.vue";
+import Navbar from "./components/UI/Navbar.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -42,6 +60,7 @@ export default {
     Pagination,
     Multiselect,
     FilterData,
+    Navbar,
   },
   data() {
     return {
@@ -95,13 +114,8 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+* {
+  margin: 0px;
 }
 </style>

@@ -43,6 +43,14 @@ export default {
 <style scoped>
 select {
   width: 20%;
-  height: 150px;
+  
+}
+
+select[multiple]{
+height: 30px;
+}
+
+select[multiple]:focus{
+height: 500px;
 }
 </style>

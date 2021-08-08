@@ -1,17 +1,29 @@
 <template>
   <div>
-    <Multiselect @statesData="statesTableData($event)" @resetData="statesTableData($event)" />
+    <Multiselect
+      @statesData="statesTableData($event)"
+      @resetData="statesTableData($event)"
+    />
     <Table
-      v-if="tableData && selectedStates.length === 0"
+      v-if="tableType === 'default'"
       :covidData="paginatedTableData"
       :config="tableConfig"
     />
     <Table
-      v-if="selectedStates.length !== 0" 
+      v-if="tableType === 'selected'"
       :covidData="selectedStates"
       :config="tableConfig"
     />
+    <Table
+      v-if="tableType === 'filtered'"
+      :covidData="filteredStatesData"
+      :config="tableConfig"
+    />
     <Pagination :totalRecords="tableCount" v-model="pagination" />
+    <FilterData
+      @filteredData="filterStatesData($event)"
+      @resetData="filterStatesData($event)"
+    />
   </div>
 </template>
 
@@ -21,6 +33,7 @@ import axios from "axios";
 import { config } from "./utils/config";
 import Pagination from "./components/UI/Pagination.vue";
 import Multiselect from "./components/UI/Multiselect.vue";
+import FilterData from "./components/UI/FilterData.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -28,6 +41,7 @@ export default {
     Table,
     Pagination,
     Multiselect,
+    FilterData,
   },
   data() {
     return {
@@ -36,6 +50,8 @@ export default {
       dataKeys: [],
       states: [],
       selectedStates: [],
+      filteredStatesData: [],
+      tableType: "default",
     };
   },
   mounted() {
@@ -68,8 +84,12 @@ export default {
   },
   methods: {
     statesTableData(fewStates) {
-      console.log(fewStates);
       this.selectedStates = fewStates;
+      this.tableType = this.tableType === "default" ? "selected" : "default";
+    },
+    filterStatesData(filtered) {
+      this.filteredStatesData = filtered;
+      this.tableType = this.tableType === "default" ? "filtered" : "default";
     },
   },
 };

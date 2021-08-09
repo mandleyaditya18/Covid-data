@@ -27,7 +27,7 @@
         />
         <Table
           v-if="tableType === 'filtered'"
-          :covidData="filteredStatesData"
+          :covidData="paginatedFilterData"
           :config="tableConfig"
         />
         <br /><br />
@@ -76,11 +76,16 @@ export default {
     ...mapGetters({
       tableData: "covidData",
       multiData: "multiSelectCovidData",
+      filterData: "filterCovidData"
     }),
     tableCount() {
-      if (this.multiData.length !== 0) {
+      if (this.tableType === "selected") {
         return Object.keys(this.multiData).length;
-      } else {
+      }
+      else if (this.tableType === "filtered") {
+        return Object.keys(this.filterData).length;
+      } 
+      else {
         return Object.keys(this.tableData).length;
       }
     },
@@ -99,12 +104,19 @@ export default {
         const lastIndex = this.pagination.page * this.pagination.perPage;
         return this.multiData.slice(firstIndex, lastIndex);
       }
+    },
+    paginatedFilterData() {
+      if (!this.filterData) return [];
+      else {
+        const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
+        const lastIndex = this.pagination.page * this.pagination.perPage;
+        return this.filterData.slice(firstIndex, lastIndex);
+      }
     }
   },
   methods: {
     ...mapActions(["initData"]),
     statesTableData(fewStates) {
-      console.log("Multiselect Data", fewStates);
       if (fewStates === false) {
         this.tableType = "selected";
       } else {
@@ -112,8 +124,11 @@ export default {
       }
     },
     filterStatesData(filtered) {
-      this.filteredStatesData = filtered;
-      this.tableType = this.tableType === "default" ? "filtered" : "default";
+      if (filtered === false) {
+        this.tableType = "filtered"
+      } else {
+        this.tableType = "default";
+      }
     },
   },
 };

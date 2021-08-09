@@ -4,7 +4,7 @@ const state = {
 
 const mutations = {
   SET_FILTER_DATA(state, theData) {
-    state.multiSelectCovidData = theData;
+    state.filterCovidData = theData;
   },
 };
 

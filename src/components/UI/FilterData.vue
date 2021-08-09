@@ -39,7 +39,7 @@
 
 <script>
 import { config } from "../../utils/config";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -52,27 +52,32 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ tableData: "covidData" }),
+    ...mapGetters({ tableData: "covidData", filterData: "filterCovidData" }),
   },
   methods: {
+    ...mapActions(["initFilterData"]),
     loadData() {
       if (this.operation === "lt" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] < this.value;
         });
-        this.$emit("filteredData", this.filteredData);
+        this.initFilterData(this.filteredData);        
+        this.$emit("filteredData", this.filterData.length === 0);
       }
       if (this.operation === "gt" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] > this.value;
         });
-        this.$emit("filteredData", this.filteredData);
+        this.initFilterData(this.filteredData);
+        this.$emit("filteredData", this.filterData.length === 0);
       }
       if (this.operation === "eq" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] == this.value;
         });
-        this.$emit("filteredData", this.filteredData);
+        this.initFilterData(this.filteredData);
+        console.log(this.filteredData);
+        this.$emit("filteredData", this.filterData.length === 0);
       }
     },
     resetData() {
@@ -80,8 +85,8 @@ export default {
       this.operation = "";
       this.value = "";
       this.filteredData = [];
-
-      this.$emit("resetData", this.filteredData);
+      this.initFilterData(this.filteredData);
+      this.$emit("resetData", this.filterData.length === 0);
     },
   },
 };

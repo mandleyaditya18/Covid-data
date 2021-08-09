@@ -25,7 +25,6 @@ const actions = {
       
       commit("SET_COVID_DATA", states);
     })
-
   },
 };
 

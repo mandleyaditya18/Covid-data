@@ -3,10 +3,14 @@
     <Navbar />
     <div class="row">
       <div class="col-lg-4 col-md-6">
-        <MultiselectData @multiCovidData="statesTableData($event)" />
+        <MultiselectData
+          v-if="tableType === 'default' || tableType === 'selected'"
+          @multiCovidData="statesTableData($event)"
+        />
       </div>
       <div class="col-lg-8 col-md-6">
         <FilterData
+          v-if="tableType === 'default' || tableType === 'filtered'"
           @filteredData="filterStatesData($event)"
           @resetData="filterStatesData($event)"
         />
@@ -76,16 +80,14 @@ export default {
     ...mapGetters({
       tableData: "covidData",
       multiData: "multiSelectCovidData",
-      filterData: "filterCovidData"
+      filterData: "filterCovidData",
     }),
     tableCount() {
       if (this.tableType === "selected") {
         return Object.keys(this.multiData).length;
-      }
-      else if (this.tableType === "filtered") {
+      } else if (this.tableType === "filtered") {
         return Object.keys(this.filterData).length;
-      } 
-      else {
+      } else {
         return Object.keys(this.tableData).length;
       }
     },
@@ -112,20 +114,26 @@ export default {
         const lastIndex = this.pagination.page * this.pagination.perPage;
         return this.filterData.slice(firstIndex, lastIndex);
       }
-    }
+    },
   },
   methods: {
-    ...mapActions(["initData"]),
+    ...mapActions(["initData", "initMultiData", "initFilterData"]),
     statesTableData(fewStates) {
       if (fewStates === false) {
+        this.initFilterData([]);
         this.tableType = "selected";
+      } else if (fewStates === true && this.filterData.length !== 0) {
+        this.tableType = "filtered";
       } else {
         this.tableType = "default";
       }
     },
     filterStatesData(filtered) {
       if (filtered === false) {
-        this.tableType = "filtered"
+        this.initMultiData([]);
+        this.tableType = "filtered";
+      } else if (filtered === true && this.multiData.length !== 0) {
+        this.tableType = "selected";
       } else {
         this.tableType = "default";
       }

@@ -75,6 +75,7 @@ export default {
       selectedStates: [],
       filteredStatesData: [],
       tableType: "default",
+      btnType: ''
     };
   },
   mounted() {
@@ -131,21 +132,29 @@ export default {
       } else if (fewStates === true && this.filterData.length !== 0) {
         this.tableType = "filtered";
       } else if (fewStates === true && this.filterData.length === 0) {
-        this.filterStatesData({ hasData: true, filterType: "show" });
+        if (this.btnType === 'show') {
+          this.filterStatesData({ hasData: true, filterType: "show" });
+        }
+        else if (this.btnType === 'reset') {
+          this.filterStatesData({ hasData: true, filterType: "reset" });
+        }
       } else {
         this.tableType = "default";
       }
     },
     filterStatesData(filtered) {
       if (filtered.hasData === false) {
+        this.btnType = 'show';
         this.tableType = "filtered";
       } else if (
         filtered.hasData === true &&
         this.multiData.length !== 0 &&
         filtered.filterType !== "show"
       ) {
+        this.btnType = 'reset';
         this.tableType = "selected";
       } else if (filtered.hasData === true && filtered.filterType === "show") {
+        this.btnType = 'show';
         this.tableType = "noData";
       } else {
         this.tableType = "default";

@@ -75,7 +75,7 @@ export default {
       selectedStates: [],
       filteredStatesData: [],
       tableType: "default",
-      btnType: ''
+      btnType: 'reset'
     };
   },
   mounted() {

@@ -3,14 +3,10 @@
     <Navbar />
     <div class="row">
       <div class="col-lg-4 col-md-6">
-        <MultiselectData
-          v-if="tableType === 'default' || tableType === 'selected'"
-          @multiCovidData="statesTableData($event)"
-        />
+        <MultiselectData @multiCovidData="statesTableData($event)" />
       </div>
       <div class="col-lg-8 col-md-6">
         <FilterData
-          v-if="tableType === 'default' || tableType === 'filtered'"
           @filteredData="filterStatesData($event)"
           @resetData="filterStatesData($event)"
         />
@@ -117,10 +113,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["initData", "initMultiData", "initFilterData"]),
+    ...mapActions(["initData"]),
     statesTableData(fewStates) {
       if (fewStates === false) {
-        this.initFilterData([]);
         this.tableType = "selected";
       } else if (fewStates === true && this.filterData.length !== 0) {
         this.tableType = "filtered";
@@ -130,7 +125,6 @@ export default {
     },
     filterStatesData(filtered) {
       if (filtered === false) {
-        this.initMultiData([]);
         this.tableType = "filtered";
       } else if (filtered === true && this.multiData.length !== 0) {
         this.tableType = "selected";

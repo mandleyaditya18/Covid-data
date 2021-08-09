@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const state = {
   covidData: [],
 };
@@ -9,8 +11,21 @@ const mutations = {
 };
 
 const actions = {
-  initData: ({ commit }, theData) => {
-    commit("SET_COVID_DATA", theData);
+  initData: ({ commit }) => {
+    let dataKeys = [];
+    let states = [];
+    axios.get("https://api.covid19india.org/v4/min/data.min.json").then(({data}) => {
+      dataKeys = Object.keys(data);
+      for (let key of dataKeys) {
+        states.push(data[key]);
+      }
+      for (let i = 0; i < states.length; i++) {
+        states[i].state = dataKeys[i];
+      }
+      
+      commit("SET_COVID_DATA", states);
+    })
+
   },
 };
 

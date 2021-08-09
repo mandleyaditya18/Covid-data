@@ -40,19 +40,20 @@
       <div class="col d-flex justify-content-center">
         <Pagination :totalRecords="tableCount" v-model="pagination" />
       </div>
+      <MultiselectData />
     </div>
   </div>
 </template>
 
 <script>
 import Table from "./components/UI/Table.vue";
-import axios from "axios";
 import { config } from "./utils/config";
 import Pagination from "./components/UI/Pagination.vue";
 import Multiselect from "./components/UI/Multiselect.vue";
 import FilterData from "./components/UI/FilterData.vue";
 import Navbar from "./components/UI/Navbar.vue";
-import { mapGetters } from "vuex";
+import MultiselectData from "./components/UI/MultiselectData.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -61,6 +62,7 @@ export default {
     Multiselect,
     FilterData,
     Navbar,
+    MultiselectData,
   },
   data() {
     return {
@@ -74,23 +76,19 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get("https://api.covid19india.org/v4/min/data.min.json")
-      .then(({ data }) => {
-        this.dataKeys = Object.keys(data);
-        for (let key of this.dataKeys) {
-          this.states.push(data[key]);
-        }
-        for (let i = 0; i < this.states.length; i++) {
-          this.states[i].state = this.dataKeys[i];
-        }
-        this.$store.dispatch("initData", this.states);
-      });
+    this.initData();
   },
   computed: {
-    ...mapGetters({ tableData: "covidData" }),
+    ...mapGetters({
+      tableData: "covidData",
+      multiData: "multiSelectCovidData",
+    }),
     tableCount() {
-      return Object.keys(this.tableData).length;
+      if (this.multiData.length !== 0) {
+        return Object.keys(this.multiData).length;
+      } else {
+        return Object.keys(this.tableData).length;
+      }
     },
     paginatedTableData() {
       if (!this.tableData) return [];
@@ -102,6 +100,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["initData"]),
     statesTableData(fewStates) {
       this.selectedStates = fewStates;
       this.tableType = this.tableType === "default" ? "selected" : "default";

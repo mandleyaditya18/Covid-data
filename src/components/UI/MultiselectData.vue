@@ -1,11 +1,13 @@
 <template>
   <div class="row">
     <div class="col-lg-6 ms">
+        <label for="multiselect">Select States</label>
       <Multiselect
         v-model="selectedStates"
         tag-placeholder="Add this as new tag"
         placeholder="Search or add a tag"
         label="state"
+        id="multiselect"
         track-by="state"
         :options="states"
         :multiple="true"
@@ -14,7 +16,6 @@
         :maxHeight="300"
       />
     </div>
-    <button class="btn btn-primary" @click="show">Click</button>
   </div>
 </template>
 
@@ -36,16 +37,12 @@ export default {
   },
   watch: {
       selectedStates(val) {
-          console.log(val);
           this.initMultiData(val);
+          this.$emit("multiCovidData", val.length === 0);
       }
   },
   methods: {
       ...mapActions(['initMultiData']),
-    show() {
-        // console.log(this.selectOptions);
-        console.log(this.multi);
-    }
   },
 };
 </script>

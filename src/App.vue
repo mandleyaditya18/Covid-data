@@ -3,10 +3,7 @@
     <Navbar />
     <div class="row">
       <div class="col-lg-4 col-md-6">
-        <Multiselect
-          @statesData="statesTableData($event)"
-          @resetData="statesTableData($event)"
-        />
+        <MultiselectData @multiCovidData="statesTableData($event)" />
       </div>
       <div class="col-lg-8 col-md-6">
         <FilterData
@@ -25,7 +22,7 @@
         />
         <Table
           v-if="tableType === 'selected'"
-          :covidData="selectedStates"
+          :covidData="paginatedMultiData"
           :config="tableConfig"
         />
         <Table
@@ -40,7 +37,6 @@
       <div class="col d-flex justify-content-center">
         <Pagination :totalRecords="tableCount" v-model="pagination" />
       </div>
-      <MultiselectData />
     </div>
   </div>
 </template>
@@ -49,7 +45,6 @@
 import Table from "./components/UI/Table.vue";
 import { config } from "./utils/config";
 import Pagination from "./components/UI/Pagination.vue";
-import Multiselect from "./components/UI/Multiselect.vue";
 import FilterData from "./components/UI/FilterData.vue";
 import Navbar from "./components/UI/Navbar.vue";
 import MultiselectData from "./components/UI/MultiselectData.vue";
@@ -59,7 +54,6 @@ export default {
   components: {
     Table,
     Pagination,
-    Multiselect,
     FilterData,
     Navbar,
     MultiselectData,
@@ -98,12 +92,24 @@ export default {
         return this.tableData.slice(firstIndex, lastIndex);
       }
     },
+    paginatedMultiData() {
+      if (!this.multiData) return [];
+      else {
+        const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
+        const lastIndex = this.pagination.page * this.pagination.perPage;
+        return this.multiData.slice(firstIndex, lastIndex);
+      }
+    }
   },
   methods: {
     ...mapActions(["initData"]),
     statesTableData(fewStates) {
-      this.selectedStates = fewStates;
-      this.tableType = this.tableType === "default" ? "selected" : "default";
+      console.log("Multiselect Data", fewStates);
+      if (fewStates === false) {
+        this.tableType = "selected";
+      } else {
+        this.tableType = "default";
+      }
     },
     filterStatesData(filtered) {
       this.filteredStatesData = filtered;

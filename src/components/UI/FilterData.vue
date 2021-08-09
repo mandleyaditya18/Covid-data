@@ -63,21 +63,21 @@ export default {
           return obj.total[this.selectedField] < this.value;
         });
         this.initFilterData(this.filteredData);       
-        this.$emit("filteredData", this.filterData.length === 0);
+        this.$emit("filteredData", {hasData: this.filterData.length === 0, filterType: 'show'});
       }
       if (this.operation === "gt" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] > this.value;
         });
         this.initFilterData(this.filteredData);
-        this.$emit("filteredData", this.filterData.length === 0);
+        this.$emit("filteredData", {hasData: this.filterData.length === 0, filterType: 'show'});
       }
       if (this.operation === "eq" && this.selectedField !== "") {
         this.filteredData = this.tableData.filter((obj) => {
           return obj.total[this.selectedField] == this.value;
         });
         this.initFilterData(this.filteredData);
-        this.$emit("filteredData", this.filterData.length === 0);
+        this.$emit("filteredData", {hasData: this.filterData.length === 0, filterType: 'show'});
       }
     },
     resetData() {
@@ -86,7 +86,7 @@ export default {
       this.value = "";
       this.filteredData = [];
       this.initFilterData(this.filteredData);
-      this.$emit("resetData", this.filterData.length === 0);
+      this.$emit("resetData", {hasData: this.filterData.length === 0, filterType: 'reset'});
     },
   },
 };

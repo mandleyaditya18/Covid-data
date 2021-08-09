@@ -34,7 +34,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col d-flex justify-content-center">
+      <div v-if="tableType === 'noData'" class="col d-flex justify-content-center">
+        <h1>No Data Available</h1>
+      </div>
+    </div>
+    <div class="row">
+      <Spinner v-if="loading" />
+      <div class="col d-flex justify-content-center">  
         <Pagination :totalRecords="tableCount" v-model="pagination" />
       </div>
     </div>
@@ -48,6 +54,7 @@ import Pagination from "./components/UI/Pagination.vue";
 import FilterData from "./components/UI/FilterData.vue";
 import Navbar from "./components/UI/Navbar.vue";
 import MultiselectData from "./components/UI/MultiselectData.vue";
+import Spinner from "./components/UI/Spinner.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -57,6 +64,7 @@ export default {
     FilterData,
     Navbar,
     MultiselectData,
+    Spinner,
   },
   data() {
     return {
@@ -77,12 +85,15 @@ export default {
       tableData: "covidData",
       multiData: "multiSelectCovidData",
       filterData: "filterCovidData",
+      loading: "isLoading",
     }),
     tableCount() {
       if (this.tableType === "selected") {
         return Object.keys(this.multiData).length;
       } else if (this.tableType === "filtered") {
         return Object.keys(this.filterData).length;
+      } else if (this.tableType === "noData") {
+        return 0;
       } else {
         return Object.keys(this.tableData).length;
       }
@@ -119,15 +130,23 @@ export default {
         this.tableType = "selected";
       } else if (fewStates === true && this.filterData.length !== 0) {
         this.tableType = "filtered";
+      } else if (fewStates === true && this.filterData.length === 0) {
+        this.filterStatesData({ hasData: true, filterType: "show" });
       } else {
         this.tableType = "default";
       }
     },
     filterStatesData(filtered) {
-      if (filtered === false) {
+      if (filtered.hasData === false) {
         this.tableType = "filtered";
-      } else if (filtered === true && this.multiData.length !== 0) {
+      } else if (
+        filtered.hasData === true &&
+        this.multiData.length !== 0 &&
+        filtered.filterType !== "show"
+      ) {
         this.tableType = "selected";
+      } else if (filtered.hasData === true && filtered.filterType === "show") {
+        this.tableType = "noData";
       } else {
         this.tableType = "default";
       }

@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- <section>
-    <p>
-      <button @click="changePage(-1)">Back</button>
-      <span>Showing Page {{ page }} of {{ pages }}</span>
-      <button @click="changePage(1)">Next</button>
-    </p>
-  </section> -->
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li class="page-item active page-link" @click="changePage(-1)">Previous</li>

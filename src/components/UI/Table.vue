@@ -56,4 +56,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+i {
+  cursor: pointer !important;
+}
+</style>

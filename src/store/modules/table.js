@@ -2,7 +2,7 @@ import axios from "axios";
 
 const state = {
   covidData: [],
-  isLoading: false
+  isLoading: false,
 };
 
 const mutations = {
@@ -11,31 +11,31 @@ const mutations = {
   },
   SET_LOADING(state, val) {
     state.isLoading = val;
-  }
+  },
 };
 
 const actions = {
   initData: ({ commit, dispatch }) => {
-    dispatch('setLoading', true);
+    dispatch("setLoading", true);
     let dataKeys = [];
     let states = [];
-    axios.get("https://api.covid19india.org/v4/min/data.min.json").then(({data}) => {
-      dataKeys = Object.keys(data);
-      for (let key of dataKeys) {
-        states.push(data[key]);
-      }
-      for (let i = 0; i < states.length; i++) {
-        states[i].state = dataKeys[i];
-      }
-      // console.log(this.isLoading);
-      // console.log(this.states);
-      commit("SET_COVID_DATA", states);
-      dispatch('setLoading', false);
-    })
+    axios
+      .get("https://data.covid19india.org/v4/min/data.min.json")
+      .then(({ data }) => {
+        dataKeys = Object.keys(data);
+        for (let key of dataKeys) {
+          states.push(data[key]);
+        }
+        for (let i = 0; i < states.length; i++) {
+          states[i].state = dataKeys[i];
+        }
+        commit("SET_COVID_DATA", states);
+        dispatch("setLoading", false);
+      });
   },
-  setLoading: ({commit}, val) => {
+  setLoading: ({ commit }, val) => {
     commit("SET_LOADING", val);
-  }
+  },
 };
 
 const getters = {
@@ -44,7 +44,7 @@ const getters = {
   },
   isLoading: (state) => {
     return state.isLoading;
-  }
+  },
 };
 
 export default {
